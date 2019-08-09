@@ -3,6 +3,7 @@ services:
   - docker
 
 before_install:
+  - bash setup.sh
   - docker build -t fashtop3/react-test -f client/Dockerfile.dev client
 
 script:
