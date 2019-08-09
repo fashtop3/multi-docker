@@ -3,30 +3,35 @@ services:
   - docker
 
 before_install:
-  - bash setup.sh
   - docker build -t fashtop3/react-test -f client/Dockerfile.dev client
 
 script:
   - docker run fashtop3/react-test npm run test -- --coverage
 
-#after_success:
-#  - docker build -t fashtop3/multi-client ./client
-#  - docker build -t fashtop3/multi-nginx ./nginx
-#  - docker build -t fashtop3/multi-server ./server
-#  - docker build -t fashtop3/multi-worker ./worker
-#  #  login to docker
-##  - echo "$DOCKER_PWD" | docker login -u "$DOCKER_ID" --password-stdin
+after_success:
+  - docker build -t fashtop3/multi-client ./client
+  - docker build -t fashtop3/multi-nginx ./nginx
+  - docker build -t fashtop3/multi-server ./server
+  - docker build -t fashtop3/multi-worker ./worker
+  #  login to docker
 #  - echo "$DOCKER_PWD" | docker login -u "$DOCKER_ID" --password-stdin
-#  # push image to hub
-#  - docker push fashtop3/multi-client
-#  - docker push fashtop3/multi-nginx
-#  - docker push fashtop3/multi-server
-#  - docker push fashtop3/multi-worker
+  - echo "$DOCKER_PWD" | docker login -u "$DOCKER_ID" --password-stdin
+  # push image to hub
+  - docker push fashtop3/multi-client
+  - docker push fashtop3/multi-nginx
+  - docker push fashtop3/multi-server
+  - docker push fashtop3/multi-worker
+
 
 deploy:
-  provider: script
-  # specify the deployment script
-  script: bash deploy.sh
-  # specify to deploy with code change a given branch
+  provider: elasticbeanstalk
+  region: "eu-central-1"
+  app: "multi-docker"
+  env: "MultiDocker-env"
+  bucket_name: "elasticbeanstalk-eu-central-1-686233958969"
+  bucket_path: "multi-docker"
   on:
     branch: master
+  access_key_id: $AWS_ACCESS_KEY_ID
+  secret_access_key: $AWS_SECRET_ACCESS_KEY
+#    secure: "$AWS_SECRET_KEY"
