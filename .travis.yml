@@ -15,7 +15,8 @@ after_success:
 #  - docker build -t fashtop3/multi-worker ./worker
   #  login to docker
 #  - echo "$DOCKER_PWD" | docker login -u "$DOCKER_ID" --password-stdin
-  - echo "$DOCKER_PWD_AWS" docker login -u AWS https://686233958969.dkr.ecr.eu-west-3.amazonaws.com --password-stdin
+  - echo "$DOCKER_PWD_AWS" docker login -u AWS -e none https://686233958969.dkr
+  - .ecr.eu-west-3.amazonaws.com --password-stdin
   # push image to hub
   - docker push 686233958969.dkr.ecr.eu-central-1.amazonaws.com/multi-client
 #  - docker push fashtop3/multi-nginx
