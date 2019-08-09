@@ -3,7 +3,7 @@ services:
   - docker
 
 before_install:
-  - docker build -t fashtop3/react-test -f client/Dockerfile.dev
+  - docker build -t fashtop3/react-test -f client/Dockerfile.dev client
 
 script:
   - docker run fashtop3/react-test npm run test -- --coverage
